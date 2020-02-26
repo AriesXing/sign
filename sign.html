@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+	<meta name="format-detection" content="telephone=yes">
+    <script src="jquery-1.9.1.js"></script>
+  	<title>移动画板</title>
+</head>
+<style>
+	.box{max-width:640px;height:300px;border:1px dashed #ccc;margin:10px auto;}
+
+</style>
+<body>
+
+	<p style="padding-left: 10px;margin-top:10px;margin-bottom: 5px;">请在虚线框内签名，完毕后点击“保存”。</p>
+ 	<div class="box">
+ 		<canvas id="handCanvas" width="640px" height="300"></canvas>
+ 	</div>
+ 	<div style="text-align: center;">
+		<input type="button" name="btnReset" id="btnReset" value="重写" />
+		<input type="submit" class="" name="btnSave" id="btnSave"  value="保存签名" />
+	</div>
+
+
+	<script>
+		
+		var _width = window.outerWidth;
+		$(".box").width(_width-20)
+		$("#handCanvas").attr("width",$(".box").width())
+		$(window).resize(function(){
+			var _width = window.outerWidth;
+			$(".box").width(_width-20)
+			$("#handCanvas").attr("width",$(".box").width())
+		})
+
+		var canvas = document.getElementById("handCanvas")
+		var stage_info = canvas.getBoundingClientRect()
+		var preHandler = function(e){e.preventDefault();}
+        var path = {
+            beginX: 0,
+            beginY: 0,
+            endX: 0,
+            endY: 0
+        }
+		cxt = canvas.getContext("2d");
+		
+		$(function() {
+		    var ctouch=$('.box canvas');
+		    ctouch.bind("touchstart",function(event){
+		        
+		        drawBegin(event)
+		       
+		    });
+		    ctouch.bind("touchmove",function(event) {
+		      	        
+		        drawing(event);
+		    });
+		    ctouch.bind("touchend",function(event) {
+		        	       
+		        drawEnd(event)
+		    });
+		    //清空
+		    $("#btnReset").click(function(){
+		    	cxt.clearRect(0, 0, $("#handCanvas").attr("width"), 300)
+		    })
+		    //保存
+		    $("#btnSave").click(function(){
+		    	var url = canvas.toDataURL("image/png")
+		    	console.log(url)
+		    })
+		});
+		function drawBegin(e) {
+	        window.getSelection() ? window.getSelection().removeAllRanges() : document.selection.empty()
+	        cxt.strokeStyle = "red"
+	        cxt.beginPath()
+	        cxt.moveTo(
+	            e.originalEvent.changedTouches[0].clientX - stage_info.left,
+	            e.originalEvent.changedTouches[0].clientY - stage_info.top
+	        )
+	        path.beginX = e.originalEvent.changedTouches[0].clientX - stage_info.left
+	        path.beginY = e.originalEvent.changedTouches[0].clientY - stage_info.top
+	        // canvas.addEventListener("touchmove",function(event){
+	        //     drawing(event)
+	        // })
+    	}
+	    function drawing(e) {
+	    	cxt.strokeStyle = "red"
+	        cxt.lineTo(
+	            e.originalEvent.changedTouches[0].clientX - stage_info.left,
+	            e.originalEvent.changedTouches[0].clientY - stage_info.top
+	        )
+	        path.endX = e.originalEvent.changedTouches[0].clientX - stage_info.left
+	        path.endY = e.originalEvent.changedTouches[0].clientY - stage_info.top
+	        cxt.stroke()
+	    }
+	    function drawEnd() {
+	        document.removeEventListener('touchstart', preHandler, false); 
+	        document.removeEventListener('touchend', preHandler, false);
+	        document.removeEventListener('touchmove', preHandler, false);
+	        //canvas.ontouchmove = canvas.ontouchend = null
+	    }
+	</script>
+</body>
+</html>
