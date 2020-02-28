@@ -72,6 +72,7 @@
 		    })
 		});
 		function drawBegin(e) {
+			e.preventDefault();
 	        window.getSelection() ? window.getSelection().removeAllRanges() : document.selection.empty()
 	        cxt.strokeStyle = "red"
 	        cxt.beginPath()
@@ -86,6 +87,7 @@
 	        // })
     	}
 	    function drawing(e) {
+	    	 e.preventDefault();
 	    	cxt.strokeStyle = "red"
 	        cxt.lineTo(
 	            e.originalEvent.changedTouches[0].clientX - stage_info.left,
