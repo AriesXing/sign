@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+	<meta name="format-detection" content="telephone=yes">
+    <script src="jquery-1.9.1.js"></script>
+	<title>Document</title>
+</head>
+<style>
+	html {
+	  font-family: sans-serif;
+	  -ms-text-size-adjust: 100%;
+	  -webkit-text-size-adjust: 100%
+	}
+	.ms-controller{visibility:hidden}
+ body{
+ 	font: 12px/1.5 arial;
+  background-color: #fff;
+ }
+	.StudentSignUp{
+		padding:0 20px;
+  box-sizing:border-box;
+	}
+	.addStudent h2{
+    color: #093962;
+    margin-bottom: 0;
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: 700;
+	}
+	.addStudent label{
+		border-bottom:1px solid #ccc;
+		padding:10px 0;
+		display: flex;
+	}
+	.addStudent .baomingForm-label {
+    display: block;
+    width: 103px;
+    border-right: 1px solid #999;
+    font-size: 14px;
+    line-height: 22px;
+    height: 22px;
+    margin-right: 16px;
+    white-space: nowrap;
+  }
+
+  .addStudent input, .addStudent select {
+    border: none;
+    outline: 0;
+    background: 0 0;
+    display: block;
+    flex-grow: 1;
+    width: 100px;    
+   }
+  
+   .red{color:red;}
+   .StudentAdd-submit {
+    display: block;
+    margin: 20px auto;
+    background: #03a9f4;
+    color: #fff;
+    font-size: 16px;
+    border: none;
+    outline: 0;
+    padding: 8px 30px;
+    border-radius: 5px;
+   }
+  button{
+   -webkit-appearance: button;
+   cursor: pointer;
+   text-transform: none;
+   font: inherit;
+    margin: 0;
+  }
+	.tip{
+		width:80%;
+		margin:0 auto;
+		height:auto;
+		padding:20px;
+		display: none;
+		position: fixed;
+		top:50%;
+		margin-top:-50%;
+		text-align: center;
+		background-color: rgba(0,0,0,.6)
+	}
+</style>
+<body>
+
+	<div class="StudentSignUp">
+		<form class="addStudent">
+		<!-- 学习顾问信息 -->
+			<h2>学习顾问信息</h2>
+			<div class="baomingForm-input">
+				<label >
+					<span class="baomingForm-label studentDataSource">学习中心</span>
+					<span>衢州职业技术学院学习中心</span>
+				</label>
+				<label >
+					<span class="baomingForm-label teacherName">姓名</span>
+					<span>徐友洪</span>
+				</label>
+				<label >
+					<span class="baomingForm-label">手机号码</span>
+					<a href="tel:15068900936">
+						<span color="blue">15068900936</span>
+					</a>
+				</label>
+			</div>
+			<!-- 学生信息 -->
+			<h2>学生信息</h2>
+			<div class="studentInfo">
+				<label  for="studentName">
+					<span class="baomingForm-label">姓名<span class="red">*</span></span>
+					<input type="text" id="studentName" name="studentName" maxlength="10">
+				</label>
+				<label  for="studentId">
+					<span class="baomingForm-label">身份证号<span class="red">*</span></span>
+					<input type="text" id="studentId" name="studentId" >
+					<button type="button" id="photoBtn" capture='camera' >点击拍照</button>
+					<div class="box">
+						<video class="capture"></video>
+					</div>
+				</label>
+				<label for="studentMobile">
+						<span class="baomingForm-label">手机号<span class="red">*</span></span>
+						<input type="text" id="sutdentMobile" name="studentMobile" maxlength="22">
+				</label>
+				<label for="mobileCode">
+					<span class="baomingForm-label">验证码<span class="red">*</span></span>
+					<input type="text" id="mobileCode" name="mobileCode" >
+					<button type="button" id="sendMobileCode" name="sendMobileCode" >发送验证码</button>
+				</label>
+				<!-- 意向院校信息 -->
+				<h2>意向院校信息</h2>
+				<div class="schoolInfo">
+					<label for="schoolName">
+						<span class="baomingForm-label ">院校</span>
+						<select name="schoolName" id="schoolName"></select>
+					</label>
+					<label for="level">
+						<span class="baomingForm-label">层次</span>
+						<select name="level" id="level"></select>
+					</label>
+					<label for="major">
+						<span class="baomingForm-label ">专业</span>
+						<select name="major" id="major"></select>
+					</label>
+				</div>
+			</div>
+		</form>
+		<button class="StudentAdd-submit" type="button" >提交信息</button>
+		<div class="tip">
+			<p>需要将身份证放于中间位置并保证字体清晰</p>
+			<button class="confirmBtn">确定</button>
+		</div>
+	</div>
+	
+		
+	<script>
+		$("#photoBtn").click(function(){
+			$('.tip').show();
+			$(".confirmBtn").click(function(){
+				$('.tip').hide();
+				var info=navigator.userAgent
+				info = info.toLowerCase();
+				if(info.match(/iPhone\sOS/i)){
+					$("#photoBtn").removeAttr("capture")　　
+				}
+				if(window.plus) {
+	            	plusReady();
+		        } else {
+		            document.addEventListener("plusready", plusReady, false);
+		        }
+
+		        function plusReady(){
+		        	 var camera = plus.camera.getCamera( 1 ); //获取摄像头管理对象
+
+		            // 字符串数组，摄像头支持的拍照分辨率
+		            //PopPositionJSON对象，弹出拍照或摄像界面指示位置
+
+		            //CameraOptions JSON对象，调用摄像头的参数
+				   console.log(camera.CameraOptions + camera.CameraOptions.PopPositionJSON)
+				}
+			})
+		})
+	</script>
+</body>
+</html>
